@@ -2,11 +2,11 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, MapPin } from "lucide-react";
 import SignalBars from "./SignalBars";
-import { SUMMARY_STATS } from "../data";
+import useDashboard from "../hooks/useDashboard";
 
 export default function Hero() {
   const navigate = useNavigate();
-  const scrollTo = (href) => document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+  const { summaryStats, loading } = useDashboard();
 
   return (
     <section id="top" className="relative overflow-hidden">
@@ -16,15 +16,16 @@ export default function Hero() {
       />
       <div className="relative max-w-7xl mx-auto px-5 md:px-8 pt-16 md:pt-24 pb-16 text-center">
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold px-3 py-1.5 rounded-full bg-elevated text-gray border border-line mb-6">
-          <MapPin size={11} /> Pune Municipal Region — Demo Build
+          <MapPin size={11} /> Pune Municipal Region — Live Build
         </span>
 
         <h1 className="text-white font-extrabold tracking-tight text-4xl sm:text-5xl md:text-6xl leading-[1.05] max-w-3xl mx-auto">
           AI-Powered Infrastructure Health <span className="text-green">&amp; Risk Monitoring</span>
         </h1>
         <p className="text-gray text-base md:text-lg mt-5 max-w-xl mx-auto">
-          Upload a photo of a road, bridge, flyover, or building. Sentinel AI simulates the full inspection
-          pipeline — detection, feature extraction, and a composite maintenance risk score — in seconds.
+          Upload a photo of a road, bridge, flyover, or building. Sentinel AI runs it through the full
+          inspection pipeline — YOLO detection, feature extraction, and a composite maintenance risk score
+          — in seconds.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-8">
@@ -46,14 +47,23 @@ export default function Hero() {
           <SignalBars mode="pulse" count={5} size="lg" />
         </div>
 
+        {/* Live KPI cards from backend */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10 max-w-3xl mx-auto">
-          {SUMMARY_STATS.map((s) => (
-            <div key={s.label} className="rounded-2xl border border-line bg-card px-4 py-5">
-              <div className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
-              <div className="text-[11px] font-semibold text-gray mt-1">{s.label}</div>
-              <div className="text-[10px] text-grayDim mt-0.5">{s.sub}</div>
-            </div>
-          ))}
+          {loading
+            ? Array(4).fill(0).map((_, i) => (
+                <div key={i} className="rounded-2xl border border-line bg-card px-4 py-5 animate-pulse">
+                  <div className="h-7 w-12 rounded bg-elevated mx-auto mb-2" />
+                  <div className="h-2 w-20 rounded bg-elevated mx-auto" />
+                </div>
+              ))
+            : summaryStats?.map((s) => (
+                <div key={s.label} className="rounded-2xl border border-line bg-card px-4 py-5">
+                  <div className="text-2xl font-extrabold" style={{ color: s.color }}>{s.value}</div>
+                  <div className="text-[11px] font-semibold text-gray mt-1">{s.label}</div>
+                  <div className="text-[10px] text-grayDim mt-0.5">{s.sub}</div>
+                </div>
+              ))
+          }
         </div>
       </div>
     </section>

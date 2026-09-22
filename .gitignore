@@ -1,4 +1,58 @@
+# JavaScript dependencies and build output
 node_modules/
 dist/
+frontend/node_modules/
+frontend/dist/
+
+# Environment files and local configuration
 .env
 .env.local
+.env.*.local
+!.env.example
+backend/.env
+
+# Python environments, caches, and test output
+venv/
+.venv/
+env/
+backend/venv/
+model/venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Jupyter and IDE files
+.ipynb_checkpoints/
+.vscode/
+.idea/
+
+# Logs and local runtime data
+*.log
+*.db
+*.sqlite
+*.sqlite3
+backend/uploads/
+
+# Datasets and generated training outputs
+data/*
+!data/README.md
+dataset/
+datasets/
+runs/
+ml/artifacts/
+
+# Model weights and serialized artifacts
+*.pt
+*.pth
+*.onnx
+*.h5
+*.pkl
+*.joblib
+
+# OS files
+.DS_Store
+Thumbs.db
